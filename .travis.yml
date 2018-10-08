@@ -95,6 +95,10 @@ matrix:
       overwrite: true
       name: User manual
       draft: true
+      on:
+        branch:
+          - "master"
+          - "travis"
 
 
 # Empty the previously built artifacts
