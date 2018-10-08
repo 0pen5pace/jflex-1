@@ -81,6 +81,21 @@ matrix:
         - lmodern
     script:
     - cd docs; make; cd ..
+    before_deploy:
+      - git config user.name "Travis CI"
+      - git config user.email "deploy@travis-ci.org"
+      - git tag -a documentation -m "Latest snapshot of the documentation" -f
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key:
+        secure: $GITHUB_TOKEN
+      file:
+        - docs/manual.pdf
+      overwrite: true
+      name: User manual
+      draft: true
+
 
 # Empty the previously built artifacts
 # They cannot be deleted in the before_cache phase,
@@ -99,7 +114,6 @@ script: scripts/run-tests.sh
 # A cache avoids downloading too much, and will also speed up the build.
 # NB: There is one cache per branch and language version/ compiler version/ JDK version
 cache:
-  apt: true
   # The timeout (in seconds) empties the cache to avoid being stuck with a corrupted artefact
   timeout: 86400  # 24 hours
   directories:
